@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta 2 - Centered Card con Background Animado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;height:100vh;overflow:hidden;background:#000}
+.bg-wrapper{position:fixed;inset:0;z-index:0}
+.bg-wrapper img{width:100%;height:100%;object-fit:cover;animation:slowZoom 20s ease-in-out infinite alternate}
+@keyframes slowZoom{0%{transform:scale(1)}100%{transform:scale(1.1)}}
+.bg-overlay{position:fixed;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.75),rgba(188,140,0,0.2));z-index:1}
+.page{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;height:100vh}
+.card{background:rgba(17,17,17,0.85);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;width:440px;padding:48px 40px;box-shadow:0 25px 60px rgba(0,0,0,0.5)}
+.card-header{text-align:center;margin-bottom:32px}
+.card-header img{width:56px;height:56px;margin-bottom:12px}
+.card-header h1{color:#fff;font-size:1.6rem;font-weight:700;margin-bottom:4px}
+.card-header p{color:#888;font-size:.9rem}
+.toggle-container{display:flex;background:#1a1a1a;border-radius:12px;padding:4px;margin-bottom:28px}
+.toggle-btn{flex:1;padding:10px;text-align:center;border-radius:10px;border:none;background:transparent;color:#888;font-weight:500;cursor:pointer;transition:.3s;font-family:inherit;font-size:.9rem}
+.toggle-btn.active{background:linear-gradient(135deg,#bc8c00,#d4a800);color:#fff;box-shadow:0 4px 12px rgba(188,140,0,0.3)}
+.input-group{margin-bottom:16px;position:relative}
+.input-group label{display:block;color:#aaa;font-size:.8rem;margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.input-group input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:.95rem;outline:none;transition:.3s;font-family:inherit}
+.input-group input:focus{border-color:#bc8c00;background:rgba(188,140,0,0.06)}
+.input-group input::placeholder{color:#555}
+.forgot{text-align:right;margin:-8px 0 16px}
+.forgot a{color:#bc8c00;font-size:.8rem;text-decoration:none}
+.forgot a:hover{text-decoration:underline}
+.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#bc8c00,#d4a800);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:.3s;font-family:inherit;letter-spacing:.3px}
+.btn-submit:hover{box-shadow:0 8px 30px rgba(188,140,0,0.4);transform:translateY(-2px)}
+.btn-submit:active{transform:translateY(0)}
+.footer-text{text-align:center;margin-top:20px;color:#666;font-size:.85rem}
+.footer-text a{color:#bc8c00;text-decoration:none;font-weight:500}
+.errors{background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.25);color:#f87171;padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:.83rem;display:none}
+/* Spinner */
+.spinner-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:100;justify-content:center;align-items:center;flex-direction:column;gap:24px}
+.spinner-overlay.active{display:flex}
+.pulse-spinner{width:64px;height:64px;position:relative}
+.pulse-spinner::before,.pulse-spinner::after{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#bc8c00}
+.pulse-spinner::before{animation:spin .8s linear infinite}
+.pulse-spinner::after{border-top-color:#d4a800;animation:spin 1.2s linear infinite reverse;inset:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-overlay p{color:#fff;font-size:1.1rem;font-weight:500}
+.spinner-overlay .progress-bar{width:200px;height:3px;background:#333;border-radius:3px;overflow:hidden}
+.spinner-overlay .progress-fill{height:100%;background:linear-gradient(90deg,#bc8c00,#d4a800);width:0;animation:fillProgress 2.5s ease forwards}
+@keyframes fillProgress{to{width:100%}}
+.form-section{display:none}
+.form-section.active{display:block}
+</style>
+</head>
+<body>
+<div class="spinner-overlay" id="spinnerOverlay">
+  <div class="pulse-spinner"></div>
+  <p id="spinnerText">Iniciando sesión...</p>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+</div>
+
+<div class="bg-wrapper"><img src="images/hotel-room.png" alt="bg"></div>
+<div class="bg-overlay"></div>
+
+<div class="page">
+  <div class="card">
+    <div class="card-header">
+      <img src="images/logo.png" alt="Logo">
+      <h1>Bienvenido</h1>
+      <p>Gestiona tus alojamientos de forma fácil</p>
+    </div>
+    <div class="toggle-container">
+      <button class="toggle-btn active" onclick="switchForm('login')">Iniciar Sesión</button>
+      <button class="toggle-btn" onclick="switchForm('register')">Registrarse</button>
+    </div>
+    <div id="errorBox" class="errors"></div>
+
+    <!-- LOGIN -->
+    <div class="form-section active" id="loginSection">
+      <form onsubmit="handleSubmit(event,'Iniciando sesión...')">
+        <div class="input-group"><label>Correo</label><input type="email" placeholder="ejemplo@correo.com" required></div>
+        <div class="input-group"><label>Contraseña</label><input type="password" placeholder="••••••••" required></div>
+        <div class="forgot"><a href="#">¿Olvidaste tu contraseña?</a></div>
+        <button type="submit" class="btn-submit">Iniciar Sesión</button>
+      </form>
+      <p class="footer-text">¿No tienes cuenta? <a href="#" onclick="switchForm('register')">Regístrate</a></p>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="form-section" id="registerSection">
+      <form onsubmit="handleSubmit(event,'Creando tu cuenta...')">
+        <div class="input-group"><label>Usuario</label><input type="text" placeholder="Tu nombre" required></div>
+        <div class="input-group"><label>Correo</label><input type="email" placeholder="ejemplo@correo.com" required></div>
+        <div class="input-group"><label>Contraseña</label><input type="password" placeholder="••••••••" required></div>
+        <button type="submit" class="btn-submit">Registrarse</button>
+      </form>
+      <p class="footer-text">¿Ya tienes cuenta? <a href="#" onclick="switchForm('login')">Inicia sesión</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchForm(type){
+  document.querySelectorAll('.toggle-btn').forEach((b,i)=>b.classList.toggle('active',i===(type==='login'?0:1)));
+  document.getElementById('loginSection').classList.toggle('active',type==='login');
+  document.getElementById('registerSection').classList.toggle('active',type==='register');
+}
+function handleSubmit(e,text){
+  e.preventDefault();
+  const o=document.getElementById('spinnerOverlay');
+  document.getElementById('spinnerText').textContent=text;
+  o.classList.add('active');
+  // Reset progress bar animation
+  const pf=o.querySelector('.progress-fill');pf.style.animation='none';pf.offsetHeight;pf.style.animation='fillProgress 2.5s ease forwards';
+  setTimeout(()=>o.classList.remove('active'),2600);
+}
+</script>
+</body>
+</html>
