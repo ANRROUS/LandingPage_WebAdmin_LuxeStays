@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+:root{
+    --mui-palette-primary-dark: #bc8c00 !important
+} 
+
+.chart-container {
+    width: 50%;
+    margin: auto;
+}
+
+.styled-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: white;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+
+div[aria-label="Light mode"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+div[aria-label="Dark mode"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+html[data-toolpad-color-scheme="dark"] a span {
+    color: white;
+}
+
+html[data-toolpad-color-scheme="dark"] select {
+    color: white;
+    border: 1px solid white;
+}
+
+html[data-toolpad-color-scheme="dark"] option {
+    color: white;
+    border: 1px solid white;
+}
+
+html[data-toolpad-color-scheme="dark"] button svg {
+    background-color: white;
+    color: black;
+    border-radius: 5PX;
+    padding: 3px;
+}
+
+html[data-toolpad-color-scheme="dark"] Canvas {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+html[data-toolpad-color-scheme="dark"] ul {
+    background-color: rgb(18, 18, 18);
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+html[data-toolpad-color-scheme="dark"] nav ul {
+    all: unset;
+}
+
+html[data-toolpad-color-scheme="dark"] p {
+    color: white;
+}
+html[data-toolpad-color-scheme="dark"] .MuiTypography-h6 {
+    --mui-palette-primary-main: white !important
+}
+
+a {
+    cursor: pointer;
+    transition: .4s;
+}
+
+svg {
+    cursor: pointer;
+    transition: .4s;
+}
+
+button svg:hover {
+    cursor: pointer;
+    transition: .4s;
+    transform: scale(.80);
+}
+
+a:hover {
+    cursor: pointer;
+    transition: .4s;
+    transform: scale(.95);
+}
+.MuiTypography-h6 {
+    --mui-palette-primary-main: black !important
+}
